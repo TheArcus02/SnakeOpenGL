@@ -4,8 +4,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from Snake import Snake
 from Food import Food
-import numpy as np
-from PIL import Image
+from utils import draw_text, load_png_texture
 
 
 def init_game():
@@ -25,7 +24,7 @@ def init_game():
     glLoadIdentity()
     glTranslatef(0.0, 0.0, -18)
 
-    # Dodajmy ustawienie kontekstu OpenGL
+    # Ustawienie kontekstu OpenGL
     pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
     pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLESAMPLES, 4)
 
@@ -46,38 +45,7 @@ def setup_lighting():
     glLightfv(GL_LIGHT0, GL_POSITION, [0.0, 0.0, 1.0, 0.0])
     glLightfv(GL_LIGHT0, GL_DIFFUSE, [1.0, 1.0, 1.0, 1.0])
 
-def load_png_texture(image_path):
-    try:
-        # Wczytaj obraz z pliku PNG
-        image = Image.open(image_path)
-        image_data = np.array(image.convert("RGBA"))
 
-        # Uzyskaj wymiary obrazu
-        width, height = image.size
-
-        # Wygeneruj identyfikator tekstury
-        texture_id = glGenTextures(1)
-
-        # Zdefiniuj parametry tekstury
-        glBindTexture(GL_TEXTURE_2D, texture_id)
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
-
-        return texture_id
-
-    except Exception as e:
-        print("Wystąpił błąd podczas wczytywania tekstury:", e)
-        return None
-
-
-def draw_text(text, position, font, color=(1.0, 1.0, 1.0)):
-    text_surface = font.render(text, True, color)
-    text_data = pygame.image.tostring(text_surface, "RGBA", True)
-
-    glRasterPos2d(*position)
-    glDrawPixels(text_surface.get_width(), text_surface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, text_data)
 
 if __name__ == '__main__':
     init_game()

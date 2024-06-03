@@ -1,5 +1,5 @@
 from OpenGL.GL import *
-
+from utils import draw_squere
 class Snake:
     def __init__(self):
         self.positions = [(0, 0)]
@@ -43,12 +43,7 @@ class Snake:
         glBindTexture(GL_TEXTURE_2D, head_texture)
         glBegin(GL_QUADS)
         x, y = self.positions[0]
-        x_center = x + 0.5  # Przesuń do środka kwadratu planszy
-        y_center = y + 0.5
-        glTexCoord2f(0.0, 0.0); glVertex3f(x_center - 0.5, y_center - 0.5, 0)
-        glTexCoord2f(1.0, 0.0); glVertex3f(x_center + 0.5, y_center - 0.5, 0)
-        glTexCoord2f(1.0, 1.0); glVertex3f(x_center + 0.5, y_center + 0.5, 0)
-        glTexCoord2f(0.0, 1.0); glVertex3f(x_center - 0.5, y_center + 0.5, 0)
+        draw_squere(x, y)
         glEnd()
         glDisable(GL_TEXTURE_2D)
 
@@ -58,11 +53,6 @@ class Snake:
         glBindTexture(GL_TEXTURE_2D, body_texture)
         glBegin(GL_QUADS)
         for (x, y) in self.positions[1:]:
-            x_center = x + 0.5  # Przesuń do środka kwadratu planszy
-            y_center = y + 0.5
-            glTexCoord2f(0.0, 0.0); glVertex3f(x_center - 0.5, y_center - 0.5, 0)
-            glTexCoord2f(1.0, 0.0); glVertex3f(x_center + 0.5, y_center - 0.5, 0)
-            glTexCoord2f(1.0, 1.0); glVertex3f(x_center + 0.5, y_center + 0.5, 0)
-            glTexCoord2f(0.0, 1.0); glVertex3f(x_center - 0.5, y_center + 0.5, 0)
+            draw_squere(x, y)
         glEnd()
         glDisable(GL_TEXTURE_2D)

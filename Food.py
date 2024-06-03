@@ -1,6 +1,6 @@
 import random
 from OpenGL.GL import *
-
+from utils import draw_squere
 class Food:
     def __init__(self):
         self.position = (random.randint(-9, 9), random.randint(-9, 9))
@@ -13,11 +13,6 @@ class Food:
         glEnable(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, food_texture)
         glBegin(GL_QUADS)
-        x_center = self.position[0] + 0.5  # Przesuń do środka kwadratu planszy
-        y_center = self.position[1] + 0.5
-        glTexCoord2f(0.0, 0.0); glVertex3f(x_center - 0.5, y_center - 0.5, 0)
-        glTexCoord2f(1.0, 0.0); glVertex3f(x_center + 0.5, y_center - 0.5, 0)
-        glTexCoord2f(1.0, 1.0); glVertex3f(x_center + 0.5, y_center + 0.5, 0)
-        glTexCoord2f(0.0, 1.0); glVertex3f(x_center - 0.5, y_center + 0.5, 0)
+        draw_squere(self.position[0], self.position[1])
         glEnd()
         glDisable(GL_TEXTURE_2D)
