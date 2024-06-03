@@ -72,8 +72,18 @@ def load_png_texture(image_path):
         return None
 
 
+def draw_text(text, position, font, color=(1.0, 1.0, 1.0)):
+    text_surface = font.render(text, True, color)
+    text_data = pygame.image.tostring(text_surface, "RGBA", True)
+
+    glRasterPos2d(*position)
+    glDrawPixels(text_surface.get_width(), text_surface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, text_data)
+
 if __name__ == '__main__':
     init_game()
+
+    pygame.font.init()
+    font = pygame.font.SysFont("Arial", 24)
 
     running = True
 
@@ -100,22 +110,28 @@ if __name__ == '__main__':
                     snake.change_direction((0, 1))
                 elif event.key == pygame.K_DOWN:
                     snake.change_direction((0, -1))
+        if snake.alive:
+            snake.move()
 
-        snake.move()
+            # Sprawdzenie kolizji z jedzeniem
+            if snake.positions[0] == food.position:
+                snake.grow()
+                food.respawn()
 
-        # Sprawdzenie kolizji z jedzeniem
-        if snake.positions[0] == food.position:
-            snake.grow()
-            food.respawn()
-
-        # Renderowanie
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        draw_grid()
-        setup_lighting()
-        snake.draw_head(snake_head_texture)
-        snake.draw_body(snake_texture)
-        food.draw(food_texture)
-        pygame.display.flip()
-        clock.tick(15)
+            # Renderowanie
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            draw_grid()
+            setup_lighting()
+            snake.draw_head(snake_head_texture)
+            snake.draw_body(snake_texture)
+            food.draw(food_texture)
+            pygame.display.flip()
+            clock.tick(15)
+        else:
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            draw_text('Game Over', (600, 500), font, (255, 255, 255))
+            pygame.display.flip()
+            pygame.time.wait(2000)
+            running = False
 
     pygame.quit()
